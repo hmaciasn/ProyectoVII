@@ -1,23 +1,47 @@
 <?php
 
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('inicio');
-})->name('home');
+    if (auth()->check()) {
+        return redirect('/dashboard');
+    }
+    return redirect('/login');
+});
 
-Route::get('/productos', function () {
-    return view('productos.index');
-})->name('productos.index');
+/*
+|--------------------------------------------------------------------------
+| Rutas para usuarios autenticados
+|--------------------------------------------------------------------------
+*/
 
-Route::get('/categorias', function () {
-    return view('categorias.index');
-})->name('categorias.index');
+Route::middleware(['auth', 'verified'])->group(function () {
 
-Route::get('/carrito', function () {
-    return view('carrito.index');
-})->name('carrito.index');
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
 
-Route::get('/contacto', function () {
-    return view('contacto.index');
-})->name('contacto.index');
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+});
+
+
+/*
+|--------------------------------------------------------------------------
+| Rutas SOLO para ADMIN
+|--------------------------------------------------------------------------
+*/
+
+Route::middleware(['auth', 'role:admin'])->group(function () {
+
+    Route::get('/admin', function () {
+        return "Panel de Administrador";
+    })->name('admin.dashboard');
+
+});
+
+
+require __DIR__.'/auth.php';
