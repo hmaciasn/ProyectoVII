@@ -25,6 +25,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+   
+    Route::get('/productos-json', function () {
+    return response()->json(Product::all());
+});
+
+    Route::get('/productos', function () {
+    return view('productos.index');
+})->middleware(['auth'])->name('productos');
 
 });
 
