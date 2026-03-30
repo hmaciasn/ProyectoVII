@@ -18,7 +18,14 @@
                      <x-nav-link :href="route('productos')" :active="request()->routeIs('productos')">
                         {{ __('Productos') }}
                     </x-nav-link>
-                </div>
+                    <div>
+                    <input 
+                        type="text" 
+                        id="buscador"
+                        placeholder="Buscar... "class="border rounded-full pl-10 pr-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300" >
+                    <span class="absolute left-3 top-1.5 text-gray-400">🔍</span>
+                    </div>
+        
             </div>
 
             <!-- Settings Dropdown -->
