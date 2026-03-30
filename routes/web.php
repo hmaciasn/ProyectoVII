@@ -26,7 +26,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
    
-    Route::get('/productos-json', function () {
+/*    Route::get('/productos-json', function () {
     return response()->json(Product::all());
 });
 
@@ -34,7 +34,37 @@ Route::middleware(['auth', 'verified'])->group(function () {
     return view('productos.index');
 })->middleware(['auth'])->name('productos');
 
-});
+}); */
+
+    /*
+|--------------------------------------------------------------------------
+| Rutas productos mas buscador
+|--------------------------------------------------------------------------
+*/
+   Route::middleware(['auth'])->group(function () {
+
+    // Vista de productos
+    Route::get('/productos', function () {
+        return view('productos.index');
+    })->name('productos');
+
+    // Endpoint JSON con búsqueda
+    Route::get('/productos-json', function (Request $request) {
+
+        $buscar = $request->buscar;
+
+        $query = Product::query();
+
+        if ($buscar) {
+            $query->where('nombre', 'like', "%$buscar%");
+        }
+
+        return response()->json($query->get());
+
+    });
+
+}); 
+    
 
 
 /*
